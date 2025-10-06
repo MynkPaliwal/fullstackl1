@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Navbar from './components/Navbar.tsx';
+import Homepage from './components/Homepage.tsx';
 
 function Home() {
   return (
@@ -37,9 +38,9 @@ function App() {
       <div className="min-h-screen bg-white">
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/mac" element={<Mac />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="/" element={<Homepage />} />
+          {/* <Route path="/mac" element={<Mac />} />
+          <Route path="*" element={<NotFound />} /> */}
         </Routes>
       </div>
     </BrowserRouter>
