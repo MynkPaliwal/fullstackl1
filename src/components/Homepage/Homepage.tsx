@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
-import Button from "../components/ui/Button.tsx";
-import ProductCard from "./ui/ProductCard.tsx";
-import SponsorsCard from "./ui/SponsorsCard.tsx";
-import PurchaseForm from "../components/PurchaseForm.tsx";
-import PurchaseSuccess from "../components/PurchaseSuccess.tsx";
-import Footer from "./Footer.tsx";
+import Button from "../ui/Button.tsx";
+import ProductCard from "../ui/ProductCard.tsx";
+import SponsorsCard from "../ui/SponsorsCard.tsx";
+import PurchaseForm from "../PurchaseForm/PurchaseForm.tsx";
+import PurchaseSuccess from "../PurchaseSuccess/PurchaseSuccess.tsx";
+import Footer from "../Footer/Footer.tsx";
+import Navbar from "../Navbar/Navbar.tsx";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import fallbackProducts from "../api/fallbackProducts.tsx";
-import fallbackSponsors from "../api/fallbackSponsors.tsx";
+import fallbackProducts from "../../api/fallbackProducts.tsx";
+import fallbackSponsors from "../../api/fallbackSponsors.tsx";
+import { HomepageStyles } from "./Homepage.styles.ts";
 
 const Homepage = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -46,7 +48,21 @@ const Homepage = () => {
   const handlePurchaseSubmit = (data: { name: string; email: string }) => {
     setIsPurchaseFormOpen(false);
     setIsSuccessOpen(true);
-    console.log('Purchase data:', data, 'Product:', selectedProduct);
+    const purchaseRecord = {
+      name: data.name || "",
+      email: data.email || "",
+      productName: selectedProduct?.name || "",
+      purchasedAt: new Date().toISOString(),
+    };
+    try {
+      localStorage.setItem("lastPurchase", JSON.stringify(purchaseRecord));
+      const existing = localStorage.getItem("purchases");
+      const list = existing ? JSON.parse(existing) : [];
+      list.push(purchaseRecord);
+      localStorage.setItem("purchases", JSON.stringify(list));
+    } catch (error) {
+      console.log("Error in storing purchase record ", error);
+    }
   };
 
   const handleCloseSuccess = () => {
@@ -56,13 +72,14 @@ const Homepage = () => {
 
   return (
     <>
-      <section id="store" className="relative h-screen bg-apple-light-gray pt-16">
-        <div className="relative h-full max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <div className="flex-1 flex flex-col justify-center items-center space-y-8 animate-fade-in">
-            <h2 className="text-5xl md:text-7xl font-semibold text-foreground text-center">
+      <Navbar />
+      <section id="store" className={HomepageStyles.rootSection}>
+        <div className={HomepageStyles.container}>
+          <div className={HomepageStyles.leftPane}>
+            <h2 className={HomepageStyles.title}>
               {products[currentSlide]?.name}
             </h2>
-            <p className="text-3xl md:text-4xl font-semibold text-apple-gray text-center">
+            <p className={HomepageStyles.price}>
               {products[currentSlide]?.price}
             </p>
             <Button
@@ -71,38 +88,38 @@ const Homepage = () => {
             />
           </div>
 
-          <div className="flex-1 flex justify-center">
+          <div className={HomepageStyles.rightPane}>
             <img
               src={products[currentSlide]?.image}
               alt={products[currentSlide]?.name}
-              className="h-96 w-auto object-contain hover-scale"
+              className={HomepageStyles.heroImg}
             />
           </div>
 
           <button onClick={goToPrevious}
-            className="absolute left-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/50 hover:bg-white/80 backdrop-blur-sm flex items-center justify-center">
-            <ChevronLeft className="h-6 w-6" />
+            className={`${HomepageStyles.navBtn} ${HomepageStyles.prevBtn}`}>
+            <ChevronLeft className={HomepageStyles.chevronIcon} />
           </button>
           <button onClick={goToNext}
-            className="absolute right-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/50 hover:bg-white/80 backdrop-blur-sm flex items-center justify-center">
-            <ChevronRight className="h-6 w-6" />
+            className={`${HomepageStyles.navBtn} ${HomepageStyles.nextBtn}`}>
+            <ChevronRight className={HomepageStyles.chevronIcon} />
           </button>
 
-          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex space-x-3 z-10">
+          <div className={HomepageStyles.dots}>
             {products.map((product, index) => (
               <button key={index} onClick={() => goToSlide(index)}
-                className={`h-2 rounded-full transition-all ${index === currentSlide ? "w-8 bg-foreground" : "w-2 bg-muted-foreground-60"}`}
+                className={index === currentSlide ? HomepageStyles.dotActive : HomepageStyles.dot}
               />
             ))}
           </div>
         </div>
       </section>
 
-      <section id="products" className="py-20 px-6 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-semibold text-center mb-4 text-foreground">Our Products</h1>
-          <div className="mt-8 overflow-x-auto">
-            <div className="flex items-stretch gap-6 min-w-full">
+      <section id="products" className={HomepageStyles.productsSection}>
+        <div className={HomepageStyles.maxWidth}>
+          <h1 className={HomepageStyles.sectionHeading}>Our Products</h1>
+          <div className={HomepageStyles.productScroller}>
+            <div className={HomepageStyles.productRow}>
               {products.map((product) => (
                 <ProductCard name={product.name} price={product.price} image={product.image}
                   onBuy={() => handleBuyNow(product.name, product.price)}
@@ -113,13 +130,13 @@ const Homepage = () => {
         </div>
       </section>
 
-      <section id="sponsors" className="py-20 px-6 bg-apple-light-gray">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-semibold text-center mb-4 text-foreground">Our Partners</h1>
-          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
+      <section id="sponsors" className={HomepageStyles.sponsorsSection}>
+        <div className={HomepageStyles.maxWidth}>
+          <h1 className={HomepageStyles.sectionHeading}>Our Partners</h1>
+          <p className={HomepageStyles.sponsorsDescription}>
             Collaborating with industry leaders to bring you the best technology
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className={HomepageStyles.sponsorsGrid}>
             {fallbackSponsors.map((sponsor) => (
               <SponsorsCard name={sponsor.name} description={sponsor.description} />
             ))}
@@ -129,7 +146,6 @@ const Homepage = () => {
 
       <Footer />
 
-      {/* Purchase Form Modal */}
       <PurchaseForm
         isOpen={isPurchaseFormOpen}
         onClose={() => setIsPurchaseFormOpen(false)}
@@ -137,7 +153,6 @@ const Homepage = () => {
         productName={selectedProduct?.name || ""}
       />
 
-      {/* Purchase Success Modal */}
       <PurchaseSuccess
         isOpen={isSuccessOpen}
         onClose={handleCloseSuccess}
