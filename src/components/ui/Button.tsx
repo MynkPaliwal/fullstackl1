@@ -1,6 +1,7 @@
 import React from "react";
 
 const Button = ({ onBuy, label = "Buy Now" }) => {
+    
     const handleClick = async () => {
         await onBuy?.();
     }

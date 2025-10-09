@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import { X } from "lucide-react";
-
-export interface PurchaseFormProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (data: { name: string; email: string }) => void;
-  productName: string;
-}
+import { purchaseFormStyles } from "./PurchaseForm.styles.ts";
+import { PurchaseFormProps } from "./PurchaseForm.types.ts";
 
 const PurchaseForm = ({ isOpen, onClose, onSubmit, productName }: PurchaseFormProps) => {
   const [formData, setFormData] = useState({ name: "", email: "" });
@@ -49,50 +44,42 @@ const PurchaseForm = ({ isOpen, onClose, onSubmit, productName }: PurchaseFormPr
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl p-6 w-full max-w-md mx-4">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-foreground">Purchase {productName}</h2>
-          <button
-            onClick={onClose}
-            className="p-1 hover:bg-gray-100 rounded-full">
-            <X className="h-5 w-5" />
+    <div className={purchaseFormStyles.backdrop}>
+      <div className={purchaseFormStyles.modal}>
+        <div className={purchaseFormStyles.header}>
+          <h2 className={purchaseFormStyles.title}>Purchase {productName}</h2>
+          <button onClick={onClose} className={purchaseFormStyles.closeBtn}>
+            <X className={purchaseFormStyles.crossIcon} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className={purchaseFormStyles.form}>
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-foreground mb-1">
+            <label htmlFor="name" className={purchaseFormStyles.label}>
               Name
             </label>
             <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} placeholder="Enter your name"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={purchaseFormStyles.input}
             />
-            {errors.name &&
-              <p className="text-red-500 text-xs mt-1">
-                {errors.name}
-              </p>
-            }
+            {errors.name && <p className={purchaseFormStyles.error}>{errors.name}</p>}
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1">
-              Email <span className="text-red-500">*</span>
+            <label htmlFor="email" className={purchaseFormStyles.label}>
+              Email <span className={purchaseFormStyles.mandatoryIcon}>*</span>
             </label>
             <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter your email"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={purchaseFormStyles.input}
               required
             />
-            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+            {errors.email && <p className={purchaseFormStyles.error}>{errors.email}</p>}
           </div>
 
-          <div className="flex gap-3 pt-4">
-            <button type="button" onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+          <div className={purchaseFormStyles.actions}>
+            <button type="button" onClick={onClose} className={purchaseFormStyles.cancel}>
               Cancel
             </button>
-            <button type="submit"
-              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+            <button type="submit" className={purchaseFormStyles.submit}>
               Purchase
             </button>
           </div>
