@@ -1,10 +1,10 @@
 export const HomepageStyles = {
   rootSection: "relative h-screen bg-apple-light-gray pt-16",
   container: "relative h-full max-w-7xl mx-auto px-6 flex items-center justify-between",
-  leftPane: "flex-1 flex flex-col justify-center items-center space-y-8 animate-fade-in",
+  leftPanel: "flex-1 flex flex-col justify-center items-center space-y-8 animate-fade-in",
   title: "text-5xl md:text-7xl font-semibold text-foreground text-center",
   price: "text-3xl md:text-4xl font-semibold text-apple-gray text-center",
-  rightPane: "flex-1 flex justify-center",
+  rightPanel: "flex-1 flex justify-center",
   heroImg: "h-96 w-auto object-contain hover-scale",
   navBtn: "absolute top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/50 hover:bg-white/80 backdrop-blur-sm flex items-center justify-center",
   prevBtn: "left-4",
@@ -20,5 +20,7 @@ export const HomepageStyles = {
   sponsorsSection: "py-20 px-6 bg-apple-light-gray",
   sponsorsGrid: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
   chevronIcon: "h-6 w-6",
-  sponsorsDescription: "text-center text-muted-foreground mb-12 max-w-2xl mx-auto"
+  sponsorsDescription: "text-center text-muted-foreground mb-12 max-w-2xl mx-auto",
+  loadingContainer: "flex flex-col items-center justify-center p-16 w-full",
+  loadingSpinner: "w-12 h-12 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"
 };
