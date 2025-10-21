@@ -7,7 +7,7 @@ import PurchaseSuccess from "../PurchaseSuccess/PurchaseSuccess.tsx";
 import Footer from "../Footer/Footer.tsx";
 import Navbar from "../Navbar/Navbar.tsx";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import fallbackProducts from "../../api/fallbackProducts.tsx";
+import fallbackProducts, { fetchAppleProducts } from "../../api/fallbackProducts.tsx";
 import fallbackSponsors from "../../api/fallbackSponsors.tsx";
 import { HomepageStyles } from "./Homepage.styles.ts";
 
@@ -16,7 +16,19 @@ const Homepage = () => {
   const [isPurchaseFormOpen, setIsPurchaseFormOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<{ name: string; price: string } | null>(null);
-  const products = fallbackProducts;
+  const [products, setProducts] = useState(fallbackProducts);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      setLoading(true);
+      const productsData = await fetchAppleProducts();
+      setProducts(productsData);
+      setLoading(false);
+    };
+    
+    loadProducts();
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -48,21 +60,18 @@ const Homepage = () => {
   const handlePurchaseSubmit = (data: { name: string; email: string }) => {
     setIsPurchaseFormOpen(false);
     setIsSuccessOpen(true);
-    const purchaseRecord = {
+    
+    const purchase = {
       name: data.name || "",
       email: data.email || "",
       productName: selectedProduct?.name || "",
-      purchasedAt: new Date().toISOString(),
+      purchasedAt: new Date().toISOString()
     };
-    try {
-      localStorage.setItem("lastPurchase", JSON.stringify(purchaseRecord));
-      const existing = localStorage.getItem("purchases");
-      const list = existing ? JSON.parse(existing) : [];
-      list.push(purchaseRecord);
-      localStorage.setItem("purchases", JSON.stringify(list));
-    } catch (error) {
-      console.log("Error in storing purchase record ", error);
-    }
+    
+    const existingPurchases = localStorage.getItem('purchases');
+    const purchases = existingPurchases ? JSON.parse(existingPurchases) : [];
+    purchases.push(purchase);
+    localStorage.setItem('purchases', JSON.stringify(purchases));
   };
 
   const handleCloseSuccess = () => {
@@ -75,26 +84,34 @@ const Homepage = () => {
       <Navbar />
       <section id="store" className={HomepageStyles.rootSection}>
         <div className={HomepageStyles.container}>
-          <div className={HomepageStyles.leftPane}>
-            <h2 className={HomepageStyles.title}>
-              {products[currentSlide]?.name}
-            </h2>
-            <p className={HomepageStyles.price}>
-              {products[currentSlide]?.price}
-            </p>
-            <Button
-              onBuy={() => handleBuyNow(products[currentSlide]?.name || "", products[currentSlide]?.price || "")}
-              label="Buy Now"
-            />
-          </div>
+          {loading ? (
+            <div className={HomepageStyles.loadingContainer}>
+              <div className={HomepageStyles.loadingSpinner}></div>
+            </div>
+          ) : (
+            <>
+              <div className={HomepageStyles.leftPanel}>
+                <h2 className={HomepageStyles.title}>
+                  {products[currentSlide]?.name}
+                </h2>
+                <p className={HomepageStyles.price}>
+                  {products[currentSlide]?.price}
+                </p>
+                <Button
+                  onBuy={() => handleBuyNow(products[currentSlide]?.name || "", products[currentSlide]?.price || "")}
+                  label="Buy Now"
+                />
+              </div>
 
-          <div className={HomepageStyles.rightPane}>
-            <img
-              src={products[currentSlide]?.image}
-              alt={products[currentSlide]?.name}
-              className={HomepageStyles.heroImg}
-            />
-          </div>
+              <div className={HomepageStyles.rightPanel}>
+                <img
+                  src={products[currentSlide]?.image}
+                  alt={products[currentSlide]?.name}
+                  className={HomepageStyles.heroImg}
+                />
+              </div>
+            </>
+          )}
 
           <button onClick={goToPrevious}
             className={`${HomepageStyles.navBtn} ${HomepageStyles.prevBtn}`}>

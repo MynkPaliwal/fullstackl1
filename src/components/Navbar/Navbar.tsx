@@ -1,19 +1,27 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import { NavbarStyles } from './Navbar.styles.ts';
-import { NAV_LINKS } from './Navbar.types.ts';
 import appleLogo from '../../assets/apple_logo.svg';
+import { NavbarStyles } from './Navbar.styles.ts';
+
+const NAV_LINKS = [
+    { name: "Store", section: "#store" },
+    { name: "Products", section: "#products" },
+    { name: "Sponsors", section: "#sponsors" },
+    { name: "Support", section: "#support" },
+    { name: "Dashboard", section: "dashboard/users" },
+];
 
 const Navbar: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navLinks = NAV_LINKS;
+
     const handleScrollToSection = (event: React.MouseEvent<HTMLAnchorElement>, section: string) => {
-        if (section === "/Users") {
+        if (section === "dashboard/users") {
             window.location.href = section;
             return;
         }
-        
+
         event.preventDefault();
         const targetId = section.replace('#', '');
         const element = document.getElementById(targetId);
@@ -39,7 +47,7 @@ const Navbar: React.FC = () => {
                 </Link>
                 <div className={NavbarStyles.desktopNav}>
                     {navLinks.map((link) => (
-                        <a key={link.name} onClick={(e) => handleScrollToSection(e, link.section)}
+                        <a key={link.name} onClick={(event) => handleScrollToSection(event, link.section)}
                             className={NavbarStyles.navLink}>
                             {link.name}
                         </a>
@@ -50,7 +58,7 @@ const Navbar: React.FC = () => {
                     className={NavbarStyles.mobileButton}
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                     aria-label="Toggle menu">
-                    {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                    {isMenuOpen ? <X className={NavbarStyles.mobileMenuIcon} /> : <Menu className={NavbarStyles.mobileMenuIcon} />}
                 </button>
             </div>
 

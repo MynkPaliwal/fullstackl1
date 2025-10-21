@@ -2,15 +2,11 @@ import React, { useState } from "react";
 import { X } from "lucide-react";
 import { purchaseFormStyles } from "./PurchaseForm.styles.ts";
 import { PurchaseFormProps } from "./PurchaseForm.types.ts";
+import { validateEmail } from "../../config/Utils.js";
 
 const PurchaseForm = ({ isOpen, onClose, onSubmit, productName }: PurchaseFormProps) => {
   const [formData, setFormData] = useState({ name: "", email: "" });
   const [errors, setErrors] = useState({ name: "", email: "" });
-
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -26,6 +22,7 @@ const PurchaseForm = ({ isOpen, onClose, onSubmit, productName }: PurchaseFormPr
     setErrors(newErrors);
 
     if (!newErrors.email) {
+      setFormData({ name: "", email: "" });
       onSubmit(formData);
     }
   };
