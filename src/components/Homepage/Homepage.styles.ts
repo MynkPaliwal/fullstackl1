@@ -22,7 +22,5 @@ export const HomepageStyles = {
   sponsorsSection: "py-20 px-6 bg-apple-light-gray",
   sponsorsGrid: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
   chevronIcon: "h-6 w-6",
-  sponsorsDescription: "text-center text-muted-foreground mb-12 max-w-2xl mx-auto",
-  loadingContainer: "flex flex-col items-center justify-center p-16 w-full",
-  loadingSpinner: "w-12 h-12 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"
+  sponsorsDescription: "text-center text-muted-foreground mb-12 max-w-2xl mx-auto"
 };

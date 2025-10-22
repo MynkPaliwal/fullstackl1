@@ -21,7 +21,6 @@ const Homepage = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch products from Apple API
   useEffect(() => {
     const loadProducts = async () => {
       setLoading(true);
@@ -29,7 +28,7 @@ const Homepage = () => {
       setProducts(productsData);
       setLoading(false);
     };
-    
+
     loadProducts();
   }, []);
 
@@ -63,8 +62,7 @@ const Homepage = () => {
   const handlePurchaseSubmit = (data: { name: string; email: string }) => {
     setIsPurchaseFormOpen(false);
     setIsSuccessOpen(true);
-    
-    // Add purchase using context
+
     addPurchase({
       name: data.name || "",
       email: data.email || "",
@@ -88,7 +86,7 @@ const Homepage = () => {
             </div>
           ) : (
             <>
-              <div className={HomepageStyles.leftPane}>
+              <div className={HomepageStyles.leftPanel}>
                 <h2 className={HomepageStyles.title}>
                   {products[currentSlide]?.name}
                 </h2>
@@ -101,7 +99,7 @@ const Homepage = () => {
                 />
               </div>
 
-              <div className={HomepageStyles.rightPane}>
+              <div className={HomepageStyles.rightPanel}>
                 <img
                   src={products[currentSlide]?.image}
                   alt={products[currentSlide]?.name}
