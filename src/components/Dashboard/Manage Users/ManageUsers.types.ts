@@ -11,4 +11,3 @@ export interface Users {
     email: string;
     itemsPurchased: string[];
 }
-

@@ -4,4 +4,3 @@ export interface DrawerButton {
     icon: string;
     onClick: () => void;
 }
-

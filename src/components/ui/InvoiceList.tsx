@@ -54,4 +54,3 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ invoices }) => {
 };
 
 export default InvoiceList;
-

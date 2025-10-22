@@ -27,4 +27,3 @@ export const ManageUsersStyles = {
     paginationButtonDisabled: "text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed",
     paginationText: "text-sm text-gray-700"
 };
-

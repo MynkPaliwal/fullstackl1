@@ -19,4 +19,3 @@ export interface EditDetailsProps {
     onCancel: () => void;
     onFormChange: (form: { name: string; itemsPurchased: string[] }) => void;
 }
-

@@ -13,4 +13,3 @@ export interface PurchaseRecord {
     productName: string;
     purchasedAt: string;
 }
-

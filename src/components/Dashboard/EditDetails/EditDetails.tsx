@@ -70,4 +70,3 @@ const EditDetails: React.FC<EditDetailsProps> = ({ editingUser, editForm, availa
 };
 
 export default EditDetails;
-

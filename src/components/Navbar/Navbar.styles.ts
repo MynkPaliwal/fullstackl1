@@ -3,9 +3,11 @@ export const NavbarStyles = {
   container: "max-w-7xl mx-auto px-6 h-16 flex items-center justify-between",
   logoImg: "h-5 w-4",
   desktopNav: "hidden md:flex items-center space-x-8",
-  navLink: "text-sm text-foreground/70 hover:text-foreground transition-fast cursor-pointer",
-  mobileButton: "md:hidden p-2",
-  mobileMenu: "md:hidden bg-white border-t border-border",
+  navLink: "text-sm cursor-pointer hover:text-black-1000 transition-colors",
+  mobileButton: "md:hidden p-2 hover:bg-gray-100 hover:rounded-lg transition-colors",
+  mobileMenu: "md:hidden bg-white border-t border-b",
   mobileMenuInner: "px-6 py-4 space-y-4",
-  mobileLink: "block text-sm text-foreground/70 hover:text-foreground transition-fast cursor-pointer py-2"
+  mobileLink: "block text-sm cursor-pointer py-2 hover:text-blue-600 hover:bg-gray-50 hover:px-2 hover:rounded-lg transition-colors",
+  mobileMenuIcon: "h-6 w-6"
 };
+

@@ -47,4 +47,3 @@ const SideDrawer: React.FC = () => {
 };
 
 export default SideDrawer;
-

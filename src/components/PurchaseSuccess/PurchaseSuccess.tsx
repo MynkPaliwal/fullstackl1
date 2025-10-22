@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { CheckCircle } from "lucide-react";
 import { purchaseSuccessStyles } from "./PurchaseSuccess.styles.ts";
 import { PurchaseSuccessProps } from "./PuchaseSuccess.types.ts";
+import { formatPurchaseDate } from "../../config/Utils.js";
 
 const PurchaseSuccess = ({ isOpen, onClose, productName, productPrice, autoCloseDelay = 10000 }: PurchaseSuccessProps) => {
   const [countdown, setCountdown] = useState(autoCloseDelay / 1000);
+  const [purchaseDate] = useState(new Date().toISOString());
 
   useEffect(() => {
     if (!isOpen) {
@@ -46,10 +48,11 @@ const PurchaseSuccess = ({ isOpen, onClose, productName, productPrice, autoClose
             <h3 className={purchaseSuccessStyles.productDetailsText}>Product Details:</h3>
             <p className={purchaseSuccessStyles.productDetailsName}><strong>Name:</strong> {productName}</p>
             <p className={purchaseSuccessStyles.productDetailsPrice}><strong>Price:</strong> {productPrice}</p>
+            <p className={purchaseSuccessStyles.productDetailsPrice}><strong>Purchased:</strong> {formatPurchaseDate(purchaseDate)}</p>
           </div>
 
           <p className={purchaseSuccessStyles.paragraph}>
-            Thank you for your purchase! You will receive a confirmation email shortly.
+            Thank you for your purchase!
           </p>
 
           <button onClick={onClose} className={purchaseSuccessStyles.okBtn}>

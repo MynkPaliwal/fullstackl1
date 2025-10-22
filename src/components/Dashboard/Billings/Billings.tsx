@@ -217,4 +217,3 @@ const Billings = () => {
 };
 
 export default Billings;
-
