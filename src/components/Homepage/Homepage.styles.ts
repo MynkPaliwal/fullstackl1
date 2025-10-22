@@ -12,6 +12,8 @@ export const HomepageStyles = {
   dots: "absolute bottom-12 left-1/2 -translate-x-1/2 flex space-x-3 z-10",
   dotActive: "h-2 rounded-full transition-all w-8 bg-foreground",
   dot: "h-2 rounded-full transition-all w-2 bg-muted-foreground-60",
+  loadingContainer: "flex flex-col items-center justify-center p-16 w-full",
+  loadingSpinner: "w-12 h-12 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin",
   productsSection: "py-20 px-6 bg-white",
   maxWidth: "max-w-7xl mx-auto",
   sectionHeading: "text-4xl md:text-5xl font-semibold text-center mb-4 text-foreground",
@@ -20,7 +22,5 @@ export const HomepageStyles = {
   sponsorsSection: "py-20 px-6 bg-apple-light-gray",
   sponsorsGrid: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
   chevronIcon: "h-6 w-6",
-  sponsorsDescription: "text-center text-muted-foreground mb-12 max-w-2xl mx-auto",
-  loadingContainer: "flex flex-col items-center justify-center p-16 w-full",
-  loadingSpinner: "w-12 h-12 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"
+  sponsorsDescription: "text-center text-muted-foreground mb-12 max-w-2xl mx-auto"
 };

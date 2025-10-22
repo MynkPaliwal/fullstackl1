@@ -3,18 +3,12 @@ import { fetchAppleProducts } from '../../../api/fallbackProducts.tsx';
 import { Users, PurchaseRecord } from './ManageUsers.types.ts';
 import { ManageUsersStyles } from './ManageUsers.styles.ts';
 import EditDetails from '../EditDetails/EditDetails.tsx';
+import { usePurchases } from '../../../context/AppContext.tsx';
 
 const ManageUsers = () => {
+    const { purchases, updatePurchases } = usePurchases();
     const [users, setUsers] = useState<Users[]>([]);
-    const [purchases, setPurchases] = useState<PurchaseRecord[]>([]);
     const [availableProducts, setAvailableProducts] = useState<any[]>([]);
-
-    useEffect(() => {
-        const storedPurchases = localStorage.getItem('purchases');
-        if (storedPurchases) {
-            setPurchases(JSON.parse(storedPurchases));
-        }
-    }, []);
 
     useEffect(() => {
         const loadProducts = async () => {
@@ -85,9 +79,7 @@ const ManageUsers = () => {
             }));
             
             const finalPurchases = [...filteredPurchases, ...newPurchases];
-            
-            localStorage.setItem('purchases', JSON.stringify(finalPurchases));
-            setPurchases(finalPurchases);
+            updatePurchases(finalPurchases);
             
             setEditingUser(null);
             setEditForm({ name: '', itemsPurchased: [] });
@@ -217,4 +209,3 @@ const ManageUsers = () => {
 };
 
 export default ManageUsers;
-

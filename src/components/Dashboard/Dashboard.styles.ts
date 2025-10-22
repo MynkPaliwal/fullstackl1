@@ -1,6 +1,4 @@
 export const DashboardStyles = {
-    container: "flex h-screen bg-apple-light-gray",
-    mainContent: "flex-1 ml-64",
-    mainContentInner: "p-6",
-    contentWrapper: "bg-white rounded-xl shadow-sm border border-gray-200 p-6"
+  container: "flex min-h-screen bg-gray-50",
+  content: "flex-1 ml-64 p-8"
 };

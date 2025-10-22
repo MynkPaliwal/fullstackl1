@@ -2,41 +2,26 @@ import React from 'react';
 import { EditDetailsProps } from './EditDetails.types.ts';
 import { EditDetailsStyles } from './EditDetails.styles.ts';
 
-const EditDetails: React.FC<EditDetailsProps> = ({
-    editingUser,
-    editForm,
-    availableProducts,
-    onSubmit,
-    onCancel,
-    onFormChange
-}) => {
+const EditDetails: React.FC<EditDetailsProps> = ({ editingUser, editForm, availableProducts, onSubmit, onCancel, onFormChange }) => {
     return (
         <div className={EditDetailsStyles.modalOverlay}>
             <div className={EditDetailsStyles.modalContent}>
-                <h2 className={EditDetailsStyles.modalTitle}>
-                    Edit User Details
-                </h2>
+                <h2 className={EditDetailsStyles.modalTitle}>Edit User Details</h2>
                 <form onSubmit={onSubmit} className={EditDetailsStyles.modalForm}>
                     <div>
-                        <label className={EditDetailsStyles.formLabel}>
-                            Name
-                        </label>
-                        <input
-                            type="text"
-                            value={editForm.name}
+                        <label className={EditDetailsStyles.formLabel}>Name</label>
+                        <input type="text" value={editForm.name}
                             onChange={(event) => onFormChange({ ...editForm, name: event.target.value })}
                             className={EditDetailsStyles.formInput}
-                            required />
+                            required
+                        />
                     </div>
                     <div>
-                        <label className={EditDetailsStyles.formLabel}>
-                            Email
-                        </label>
-                        <input
-                            type="email"
-                            value={editingUser.email}
+                        <label className={EditDetailsStyles.formLabel}>Email</label>
+                        <input type="email" value={editingUser.email}
                             disabled
-                            className={EditDetailsStyles.formInputDisabled} />
+                            className={EditDetailsStyles.formInputDisabled}
+                        />
                         <p className={EditDetailsStyles.formHelpText}>
                             Email cannot be changed (unique identifier)
                         </p>
@@ -69,8 +54,7 @@ const EditDetails: React.FC<EditDetailsProps> = ({
                         </div>
                     </div>
                     <div className={EditDetailsStyles.formButtonsContainer}>
-                        <button className={EditDetailsStyles.submitButton}
-                            type="submit">
+                        <button className={EditDetailsStyles.submitButton} type="submit">
                             Save Changes
                         </button>
                         <button className={EditDetailsStyles.cancelButton}
@@ -86,4 +70,3 @@ const EditDetails: React.FC<EditDetailsProps> = ({
 };
 
 export default EditDetails;
-

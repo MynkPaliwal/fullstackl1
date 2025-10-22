@@ -5,27 +5,23 @@ import ManageUsers from './Manage Users/ManageUsers.tsx';
 import Billings from './Billings/Billings.tsx';
 import { DashboardStyles } from './Dashboard.styles.ts';
 
-const Dashboard = () => {
+const Dashboard: React.FC = () => {
     const location = useLocation();
 
     const renderContent = () => {
-        switch (location.pathname) {
-            case '/dashboard/users':
-                return <ManageUsers />;
-            case '/dashboard/billings':
-                return <Billings />;
+        if (location.pathname === '/dashboard/users') {
+            return <ManageUsers />;
+        } else if (location.pathname === '/dashboard/billings') {
+            return <Billings />;
         }
+        return <ManageUsers />;
     };
 
     return (
         <div className={DashboardStyles.container}>
             <SideDrawer />
-            <div className={DashboardStyles.mainContent}>
-                <div className={DashboardStyles.mainContentInner}>
-                    <div className={DashboardStyles.contentWrapper}>
-                        {renderContent()}
-                    </div>
-                </div>
+            <div className={DashboardStyles.content}>
+                {renderContent()}
             </div>
         </div>
     );

@@ -1,6 +1,4 @@
 import React from 'react';
-import { formatPurchaseDate } from '../../config/Utils.js';
-import { BillingsStyles } from '../Dashboard/Billings/Billings.styles.ts';
 
 interface Invoice {
     id: string;
@@ -15,24 +13,37 @@ interface InvoiceListProps {
 }
 
 const InvoiceList: React.FC<InvoiceListProps> = ({ invoices }) => {
+    const formatDate = (dateString: string) => {
+        try {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+        } catch (error) {
+            return dateString;
+        }
+    };
+
     return (
         <>
             {invoices.map((invoice) => (
-                <tr key={invoice.id} className={BillingsStyles.tableRow}>
-                    <td className={BillingsStyles.tableCellBold}>
+                <tr key={invoice.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {invoice.id}
                     </td>
-                    <td className={BillingsStyles.tableCell}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {invoice.product}
                     </td>
-                    <td className={BillingsStyles.tableCell}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                         {invoice.userEmail}
                     </td>
-                    <td className={BillingsStyles.tableCell}>
-                        {formatPurchaseDate(invoice.date)}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        {formatDate(invoice.date)}
                     </td>
-                    <td className={BillingsStyles.tableCell}>
-                        <span className={BillingsStyles.statusBadge}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                             {invoice.status}
                         </span>
                     </td>
@@ -43,4 +54,3 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ invoices }) => {
 };
 
 export default InvoiceList;
-

@@ -6,8 +6,10 @@ import { DrawerButton } from './SideDrawer.types.ts';
 const SideDrawer: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const drawerButtons: DrawerButton[] = [{ id: 'users', label: 'Users', icon: '👥', onClick: () => navigate('/dashboard/users') },
-    { id: 'billings', label: 'Billings', icon: '💰', onClick: () => navigate('/dashboard/billings') }];
+    const drawerButtons: DrawerButton[] = [
+        { id: 'users', label: 'Users', icon: '👥', onClick: () => navigate('/dashboard/users') },
+        { id: 'billings', label: 'Billings', icon: '💰', onClick: () => navigate('/dashboard/billings') }
+    ];
 
     const handleButtonClick = useCallback((button: DrawerButton) => {
         button.onClick();

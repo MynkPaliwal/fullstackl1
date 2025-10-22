@@ -1,12 +1,42 @@
 import React, { useEffect, useState } from 'react';
-import { getTrendingProducts, getPaginatedItems } from '../../../config/Utils.js';
 import { fetchAppleProducts } from '../../../api/fallbackProducts.tsx';
 import { TrendingProduct, PurchaseRecord } from './Billings.types.ts';
 import { BillingsStyles } from './Billings.styles.ts';
 import InvoiceList from '../../ui/InvoiceList.tsx';
+import { usePurchases } from '../../../context/AppContext.tsx';
+
+const getTrendingProducts = (purchases: PurchaseRecord[], products: any[], limit = 5) => {
+    if (!purchases || purchases.length === 0) {
+        return [];
+    }
+
+    const productCounts: { [key: string]: number } = {};
+    purchases.forEach(purchase => {
+        if (purchase.productName) {
+            productCounts[purchase.productName] = (productCounts[purchase.productName] || 0) + 1;
+        }
+    });
+
+    const trendingProducts = products.filter(product => productCounts[product.name] > 0)
+        .map(product => ({
+            ...product,
+            purchaseCount: productCounts[product.name] || 0
+        })).sort((a, b) => b.purchaseCount - a.purchaseCount).slice(0, limit);
+
+    return trendingProducts;
+};
+
+const getPaginatedItems = (items: any[], currentPage: number, itemsPerPage: number) => {
+    const totalPages = Math.ceil(items.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedItems = items.slice(startIndex, endIndex);
+
+    return { paginatedItems, totalPages };
+};
 
 const Billings = () => {
-    const [purchases, setPurchases] = useState<PurchaseRecord[]>([]);
+    const { purchases } = usePurchases();
     const [products, setProducts] = useState<any[]>([]);
     const [trendingProducts, setTrendingProducts] = useState<TrendingProduct[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -14,18 +44,10 @@ const Billings = () => {
     const [loadingProducts, setLoadingProducts] = useState(true);
 
     useEffect(() => {
-        const storedPurchases = localStorage.getItem('purchases');
-        if (storedPurchases) {
-            setPurchases(JSON.parse(storedPurchases));
-        }
-    }, []);
-
-    useEffect(() => {
         const loadProducts = async () => {
             setLoadingProducts(true);
             try {
                 const productsData = await fetchAppleProducts();
-                console.log('Loaded products:', productsData);
                 setProducts(productsData);
             } catch (error) {
                 console.error('Failed to load products:', error);
@@ -38,11 +60,8 @@ const Billings = () => {
     }, []);
 
     useEffect(() => {
-        console.log('Products state:', products);
-        console.log('Purchases state:', purchases);
         if (products.length > 0) {
             const trending = getTrendingProducts(purchases, products, 3);
-            console.log('Trending calculated:', trending);
             setTrendingProducts(trending);
         }
     }, [purchases, products]);
@@ -57,11 +76,7 @@ const Billings = () => {
             status: 'Completed'
         }));
 
-    const { paginatedItems: paginatedInvoices, totalPages } = getPaginatedItems(
-        sortedInvoices,
-        currentPage,
-        itemsPerPage
-    );
+    const { paginatedItems: paginatedInvoices, totalPages } = getPaginatedItems(sortedInvoices, currentPage, itemsPerPage);
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -120,7 +135,7 @@ const Billings = () => {
                 <div className={BillingsStyles.sectionCard}>
                     <h2 className={BillingsStyles.sectionTitle}>🔥 Trending Products</h2>
                     <p className={BillingsStyles.sectionDescription}>Most purchased items based on customer activity</p>
-                    
+
                     {loadingProducts ? (
                         <div className={BillingsStyles.loadingContainer}>
                             <div className={BillingsStyles.loadingSpinner}></div>
@@ -133,8 +148,8 @@ const Billings = () => {
                                     <div className={BillingsStyles.trendingCardInner}>
                                         <h3 className={BillingsStyles.productName}>{product.name}</h3>
                                         <div className={BillingsStyles.productImageContainer}>
-                                            <img 
-                                                src={product.image} 
+                                            <img
+                                                src={product.image}
                                                 alt={product.name}
                                                 className={BillingsStyles.productImage}
                                             />

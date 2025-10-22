@@ -45,7 +45,7 @@ export const fetchAppleProducts = async () => {
   try {
     const corsProxy = 'https://api.allorigins.win/raw?url=';
     const apiUrl = 'https://www.apple.com/in/shop/mcm/product-price?parts=IPHONE17PRO,IPHONEAIR,IPHONE17,IPHONE16,IPHONE16E_MAIN';
-    
+
     const response = await axios.get(
       `${corsProxy}${encodeURIComponent(apiUrl)}`,
       {
@@ -75,6 +75,3 @@ export const fetchAppleProducts = async () => {
     return staticProducts;
   }
 };
-
-const fallbackProducts: any[] = [];
-export default fallbackProducts;

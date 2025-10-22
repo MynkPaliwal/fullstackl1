@@ -7,16 +7,18 @@ import PurchaseSuccess from "../PurchaseSuccess/PurchaseSuccess.tsx";
 import Footer from "../Footer/Footer.tsx";
 import Navbar from "../Navbar/Navbar.tsx";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import fallbackProducts, { fetchAppleProducts } from "../../api/fallbackProducts.tsx";
+import { fetchAppleProducts } from "../../api/fallbackProducts.tsx";
 import fallbackSponsors from "../../api/fallbackSponsors.tsx";
 import { HomepageStyles } from "./Homepage.styles.ts";
+import { usePurchases } from "../../context/AppContext.tsx";
 
 const Homepage = () => {
+  const { addPurchase } = usePurchases();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPurchaseFormOpen, setIsPurchaseFormOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<{ name: string; price: string } | null>(null);
-  const [products, setProducts] = useState(fallbackProducts);
+  const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -26,7 +28,7 @@ const Homepage = () => {
       setProducts(productsData);
       setLoading(false);
     };
-    
+
     loadProducts();
   }, []);
 
@@ -60,18 +62,12 @@ const Homepage = () => {
   const handlePurchaseSubmit = (data: { name: string; email: string }) => {
     setIsPurchaseFormOpen(false);
     setIsSuccessOpen(true);
-    
-    const purchase = {
+
+    addPurchase({
       name: data.name || "",
       email: data.email || "",
-      productName: selectedProduct?.name || "",
-      purchasedAt: new Date().toISOString()
-    };
-    
-    const existingPurchases = localStorage.getItem('purchases');
-    const purchases = existingPurchases ? JSON.parse(existingPurchases) : [];
-    purchases.push(purchase);
-    localStorage.setItem('purchases', JSON.stringify(purchases));
+      productName: selectedProduct?.name || ""
+    });
   };
 
   const handleCloseSuccess = () => {
