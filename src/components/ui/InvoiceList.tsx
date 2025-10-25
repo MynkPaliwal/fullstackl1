@@ -1,4 +1,5 @@
 import React from 'react';
+import { format, parseISO, isValid } from 'date-fns';
 
 interface Invoice {
     id: string;
@@ -15,12 +16,11 @@ interface InvoiceListProps {
 const InvoiceList: React.FC<InvoiceListProps> = ({ invoices }) => {
     const formatDate = (dateString: string) => {
         try {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'short', 
-                day: 'numeric' 
-            });
+            const date = parseISO(dateString);
+            if (!isValid(date)) {
+                return dateString;
+            }
+            return format(date, 'MMM d, yyyy');
         } catch (error) {
             return dateString;
         }

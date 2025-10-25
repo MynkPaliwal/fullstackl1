@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { formatISO, parseISO } from 'date-fns';
 import { fetchAppleProducts } from '../../../api/fallbackProducts.tsx';
 import { TrendingProduct, PurchaseRecord } from './Billings.types.ts';
 import { BillingsStyles } from './Billings.styles.ts';
@@ -67,12 +68,12 @@ const Billings = () => {
     }, [purchases, products]);
 
     const sortedInvoices = purchases
-        .sort((a, b) => new Date(b.purchasedAt).getTime() - new Date(a.purchasedAt).getTime())
+        .sort((a, b) => parseISO(b.purchasedAt).getTime() - parseISO(a.purchasedAt).getTime())
         .map((purchase, index) => ({
             id: purchase.id || `INV-${String(index + 1).padStart(4, '0')}`,
             product: purchase.productName || 'Unknown Product',
             userEmail: purchase.email || 'N/A',
-            date: purchase.purchasedAt || new Date().toISOString(),
+            date: purchase.purchasedAt || formatISO(new Date()),
             status: 'Completed'
         }));
 

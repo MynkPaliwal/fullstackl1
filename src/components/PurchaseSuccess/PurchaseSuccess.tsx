@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { formatISO } from "date-fns";
 import { CheckCircle } from "lucide-react";
 import { purchaseSuccessStyles } from "./PurchaseSuccess.styles.ts";
 import { PurchaseSuccessProps } from "./PuchaseSuccess.types.ts";
@@ -6,7 +7,7 @@ import { formatPurchaseDate } from "../../config/Utils.js";
 
 const PurchaseSuccess = ({ isOpen, onClose, productName, productPrice, autoCloseDelay = 10000 }: PurchaseSuccessProps) => {
   const [countdown, setCountdown] = useState(autoCloseDelay / 1000);
-  const [purchaseDate] = useState(new Date().toISOString());
+  const [purchaseDate] = useState(formatISO(new Date()));
 
   useEffect(() => {
     if (!isOpen) {

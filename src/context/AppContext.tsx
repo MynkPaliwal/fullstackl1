@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { formatISO } from 'date-fns';
 
 export interface PurchaseRecord {
     id?: string;
@@ -38,7 +39,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     const addPurchase = (purchase: Omit<PurchaseRecord, 'purchasedAt'>) => {
         const newPurchase: PurchaseRecord = {
             ...purchase,
-            purchasedAt: new Date().toISOString()
+            purchasedAt: formatISO(new Date())
         };
         setPurchases(prev => [...prev, newPurchase]);
     };
