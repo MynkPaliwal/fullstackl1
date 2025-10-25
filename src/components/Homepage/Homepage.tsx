@@ -110,11 +110,11 @@ const Homepage = () => {
           )}
 
           <button onClick={goToPrevious}
-            className={`${HomepageStyles.navBtn} ${HomepageStyles.prevBtn}`}>
+            className={`${HomepageStyles.navBtn} ${HomepageStyles.prevBtn} hidden md:flex`}>
             <ChevronLeft className={HomepageStyles.chevronIcon} />
           </button>
           <button onClick={goToNext}
-            className={`${HomepageStyles.navBtn} ${HomepageStyles.nextBtn}`}>
+            className={`${HomepageStyles.navBtn} ${HomepageStyles.nextBtn} hidden md:flex`}>
             <ChevronRight className={HomepageStyles.chevronIcon} />
           </button>
 

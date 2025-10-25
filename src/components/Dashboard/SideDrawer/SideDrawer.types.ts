@@ -4,3 +4,7 @@ export interface DrawerButton {
     icon: string;
     onClick: () => void;
 }
+export interface SideDrawerProps {
+    isOpen: boolean;
+    onToggle: () => void;
+}

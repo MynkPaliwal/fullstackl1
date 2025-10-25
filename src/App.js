@@ -7,14 +7,14 @@ import Dashboard from './components/Dashboard/Dashboard.tsx';
 const App = () => {
   return (
     <BrowserRouter>
-        <div className="min-h-screen bg-white">
-          <Routes>
-            <Route path="/" element={<Homepage />} />
-            <Route path="/dashboard/users" element={<Dashboard />} />
-            <Route path="/dashboard/billings" element={<Dashboard />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </div>
+      <div className="min-h-screen bg-white">
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/dashboard/users" element={<Dashboard />} />
+          <Route path="/dashboard/billings" element={<Dashboard />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
     </BrowserRouter>
   );
 }

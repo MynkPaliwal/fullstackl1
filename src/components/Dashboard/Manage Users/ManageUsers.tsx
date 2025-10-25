@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { formatISO } from 'date-fns';
 import { fetchAppleProducts } from '../../../api/fallbackProducts.tsx';
-import { Users, PurchaseRecord } from './ManageUsers.types.ts';
+import { Users } from './ManageUsers.types.ts';
 import { ManageUsersStyles } from './ManageUsers.styles.ts';
 import EditDetails from '../EditDetails/EditDetails.tsx';
 import { usePurchases } from '../../../context/AppContext.tsx';
@@ -25,7 +26,7 @@ const ManageUsers = () => {
 
     const getUsers = () => {
         const userMap = new Map();
-        
+
         purchases.forEach(purchase => {
             if (userMap.has(purchase.email)) {
                 const user = userMap.get(purchase.email);
@@ -68,19 +69,19 @@ const ManageUsers = () => {
         if (editingUser) {
             setUsers(users.map(user =>
                 user.id === editingUser.id ? { ...user, name: editForm.name, itemsPurchased: editForm.itemsPurchased } : user));
-            
+
             const filteredPurchases = purchases.filter(p => p.email !== editingUser.email);
-            
+
             const newPurchases = editForm.itemsPurchased.map(item => ({
                 name: editForm.name,
                 email: editingUser.email,
                 productName: item,
-                purchasedAt: new Date().toISOString()
+                purchasedAt: formatISO(new Date())
             }));
-            
+
             const finalPurchases = [...filteredPurchases, ...newPurchases];
             updatePurchases(finalPurchases);
-            
+
             setEditingUser(null);
             setEditForm({ name: '', itemsPurchased: [] });
         }

@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { X, ArrowLeft } from 'lucide-react';
 import { SideDrawerStyles } from './SideDrawer.styles.ts';
-import { DrawerButton } from './SideDrawer.types.ts';
+import { DrawerButton, SideDrawerProps } from './SideDrawer.types.ts';
 
-const SideDrawer: React.FC = () => {
+const SideDrawer: React.FC<SideDrawerProps> = ({ isOpen, onToggle }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const drawerButtons: DrawerButton[] = [
@@ -13,36 +14,59 @@ const SideDrawer: React.FC = () => {
 
     const handleButtonClick = useCallback((button: DrawerButton) => {
         button.onClick();
-    }, []);
+        onToggle();
+    }, [onToggle]);
 
     const isActive = (buttonId: string) => {
-        return location.pathname.includes(buttonId);
+        if (buttonId === 'users') {
+            return location.pathname === '/dashboard/users';
+        }
+        if (buttonId === 'billings') {
+            return location.pathname === '/dashboard/billings';
+        }
+        return false;
     };
 
     return (
-        <div className={SideDrawerStyles.container}>
-            <div className={SideDrawerStyles.header}>
-                <div className={SideDrawerStyles.headerContent}>
-                    <button onClick={() => navigate('/')} className={SideDrawerStyles.backButton} aria-label="Go back to home">←</button>
-                    <h2 className={SideDrawerStyles.title}>Dashboard</h2>
+        <>
+            {isOpen && (
+                <div onClick={onToggle} className={SideDrawerStyles.overlay}></div>
+            )}
+
+            <div className={`${SideDrawerStyles.container} ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
+                <div className={SideDrawerStyles.logoSection}>
+                    <div className={SideDrawerStyles.logoContainer}>
+                        <button 
+                            onClick={() => navigate('/')} 
+                            className={SideDrawerStyles.backButton}
+                            title="Back to Home"
+                        >
+                            <ArrowLeft size={20} />
+                        </button>
+                        <h1 className={SideDrawerStyles.logoText}>Dashboard</h1>
+                    </div>
+                    <button onClick={onToggle} className={SideDrawerStyles.closeButton}>
+                        <X size={24} />
+                    </button>
+                </div>
+                <div className={SideDrawerStyles.buttonSection}>
+                    {drawerButtons.map((button) => (
+                        <button
+                            key={button.id}
+                            onClick={() => handleButtonClick(button)}
+                            className={`${SideDrawerStyles.button} ${
+                                isActive(button.id)
+                                    ? SideDrawerStyles.buttonActive
+                                    : SideDrawerStyles.buttonInactive
+                            }`}
+                        >
+                            <span className={SideDrawerStyles.buttonIcon}>{button.icon}</span>
+                            <span className={SideDrawerStyles.buttonLabel}>{button.label}</span>
+                        </button>
+                    ))}
                 </div>
             </div>
-
-            <div className={SideDrawerStyles.drawerContent}>
-                {drawerButtons.map((button) => (
-                    <button 
-                        key={button.id} 
-                        onClick={() => handleButtonClick(button)} 
-                        className={isActive(button.id) ? SideDrawerStyles.menuButtonActive : SideDrawerStyles.menuButton} 
-                        aria-label={button.label}>
-                        <span className={SideDrawerStyles.menuIcon}>{button.icon}</span>
-                        <span className={isActive(button.id) ? SideDrawerStyles.menuLabelActive : SideDrawerStyles.menuLabel}>
-                            {button.label}
-                        </span>
-                    </button>
-                ))}
-            </div>
-        </div>
+        </>
     );
 };
 
