@@ -28,8 +28,8 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ invoices }) => {
 
     return (
         <>
-            {invoices.map((invoice) => (
-                <tr key={invoice.id} className="hover:bg-gray-50">
+            {invoices.map((invoice, index) => (
+                <tr key={`${invoice.id}-${index}`} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {invoice.id}
                     </td>

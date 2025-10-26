@@ -3,6 +3,7 @@ import { EditDetailsProps } from './EditDetails.types.ts';
 import { EditDetailsStyles } from './EditDetails.styles.ts';
 
 const EditDetails: React.FC<EditDetailsProps> = ({ editingUser, editForm, availableProducts, onSubmit, onCancel, onFormChange }) => {
+
     return (
         <div className={EditDetailsStyles.modalOverlay}>
             <div className={EditDetailsStyles.modalContent}>
@@ -13,15 +14,13 @@ const EditDetails: React.FC<EditDetailsProps> = ({ editingUser, editForm, availa
                         <input type="text" value={editForm.name}
                             onChange={(event) => onFormChange({ ...editForm, name: event.target.value })}
                             className={EditDetailsStyles.formInput}
-                            required
-                        />
+                            required />
                     </div>
                     <div>
                         <label className={EditDetailsStyles.formLabel}>Email</label>
                         <input type="email" value={editingUser.email}
                             disabled
-                            className={EditDetailsStyles.formInputDisabled}
-                        />
+                            className={EditDetailsStyles.formInputDisabled} />
                         <p className={EditDetailsStyles.formHelpText}>
                             Email cannot be changed (unique identifier)
                         </p>

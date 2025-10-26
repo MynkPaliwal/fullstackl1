@@ -47,7 +47,10 @@ const Navbar: React.FC = () => {
                 </Link>
                 <div className={NavbarStyles.desktopNav}>
                     {navLinks.map((link) => (
-                        <a key={link.name} onClick={(event) => handleScrollToSection(event, link.section)}
+                        <a 
+                            key={link.name} 
+                            href={link.section.startsWith('#') ? link.section : `/${link.section}`}
+                            onClick={(event) => handleScrollToSection(event, link.section)}
                             className={NavbarStyles.navLink}>
                             {link.name}
                         </a>

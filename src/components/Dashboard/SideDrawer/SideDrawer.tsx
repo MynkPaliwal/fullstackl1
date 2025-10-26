@@ -36,11 +36,10 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ isOpen, onToggle }) => {
             <div className={`${SideDrawerStyles.container} ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
                 <div className={SideDrawerStyles.logoSection}>
                     <div className={SideDrawerStyles.logoContainer}>
-                        <button 
-                            onClick={() => navigate('/')} 
+                        <button
+                            onClick={() => navigate('/')}
                             className={SideDrawerStyles.backButton}
-                            title="Back to Home"
-                        >
+                            title="Back to Home">
                             <ArrowLeft size={20} />
                         </button>
                         <h1 className={SideDrawerStyles.logoText}>Dashboard</h1>
@@ -54,12 +53,10 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ isOpen, onToggle }) => {
                         <button
                             key={button.id}
                             onClick={() => handleButtonClick(button)}
-                            className={`${SideDrawerStyles.button} ${
-                                isActive(button.id)
-                                    ? SideDrawerStyles.buttonActive
-                                    : SideDrawerStyles.buttonInactive
-                            }`}
-                        >
+                            className={`${SideDrawerStyles.button} ${isActive(button.id)
+                                ? SideDrawerStyles.buttonActive
+                                : SideDrawerStyles.buttonInactive
+                                }`}>
                             <span className={SideDrawerStyles.buttonIcon}>{button.icon}</span>
                             <span className={SideDrawerStyles.buttonLabel}>{button.label}</span>
                         </button>
