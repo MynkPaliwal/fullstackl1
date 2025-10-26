@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { formatISO } from 'date-fns';
+import { generateInvoiceId } from '../config/Utils.js';
 
 export interface PurchaseRecord {
     id?: string;
@@ -18,19 +19,23 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [purchases, setPurchases] = useState<PurchaseRecord[]>([]);
-
-    useEffect(() => {
+    const [purchases, setPurchases] = useState<PurchaseRecord[]>(() => {
         const storedPurchases = localStorage.getItem('purchases');
         if (storedPurchases) {
             try {
-                setPurchases(JSON.parse(storedPurchases));
+                const parsed = JSON.parse(storedPurchases);
+                if (Array.isArray(parsed)) {
+                    return parsed;
+                }
+                console.error('Stored purchases is not an array, resetting to empty array');
+                return [];
             } catch (error) {
                 console.error('Error parsing purchases from localStorage:', error);
-                setPurchases([]);
+                return [];
             }
         }
-    }, []);
+        return [];
+    });
 
     useEffect(() => {
         localStorage.setItem('purchases', JSON.stringify(purchases));
@@ -39,6 +44,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     const addPurchase = (purchase: Omit<PurchaseRecord, 'purchasedAt'>) => {
         const newPurchase: PurchaseRecord = {
             ...purchase,
+            id: generateInvoiceId(),
             purchasedAt: formatISO(new Date())
         };
         setPurchases(prev => [...prev, newPurchase]);

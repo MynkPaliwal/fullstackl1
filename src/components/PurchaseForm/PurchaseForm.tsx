@@ -22,8 +22,8 @@ const PurchaseForm = ({ isOpen, onClose, onSubmit, productName }: PurchaseFormPr
     setErrors(newErrors);
 
     if (!newErrors.email) {
-      setFormData({ name: "", email: "" });
       onSubmit(formData);
+      setFormData({ name: "", email: "" });
     }
   };
 

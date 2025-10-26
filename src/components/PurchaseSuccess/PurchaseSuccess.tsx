@@ -33,7 +33,7 @@ const PurchaseSuccess = ({ isOpen, onClose, productName, productPrice, autoClose
       clearTimeout(timer);
       clearInterval(countdownInterval);
     };
-  }, [isOpen]);
+  }, [isOpen, autoCloseDelay, onClose]);
 
   if (!isOpen) {
     return null;

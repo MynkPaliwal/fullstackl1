@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Button from "../ui/Button.tsx";
 import ProductCard from "../ui/ProductCard.tsx";
 import SponsorsCard from "../ui/SponsorsCard.tsx";
@@ -70,10 +70,10 @@ const Homepage = () => {
     });
   };
 
-  const handleCloseSuccess = () => {
+  const handleCloseSuccess = useCallback(() => {
     setIsSuccessOpen(false);
     setSelectedProduct(null);
-  };
+  }, []);
 
   return (
     <>

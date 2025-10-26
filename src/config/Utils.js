@@ -1,5 +1,11 @@
 import { format, parseISO, isValid } from 'date-fns';
 
+export const generateInvoiceId = () => {
+    const timestamp = Date.now().toString(36);
+    const randomStr = Math.random().toString(36).substring(2, 7).toUpperCase();
+    return `INV-${timestamp}-${randomStr}`;
+};
+
 export const getTrendingProducts = (purchases, products, limit = 5) => {
     if (!purchases || purchases.length === 0) {
         return [];

@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { formatISO } from 'date-fns';
+import React, { useState, useEffect, useMemo } from 'react';
+import { formatISO, parseISO } from 'date-fns';
 import { fetchAppleProducts } from '../../../api/fallbackProducts.tsx';
 import { Users } from './ManageUsers.types.ts';
 import { ManageUsersStyles } from './ManageUsers.styles.ts';
 import EditDetails from '../EditDetails/EditDetails.tsx';
+import UserTable from '../../ui/UserTable.tsx';
 import { usePurchases } from '../../../context/AppContext.tsx';
+import { generateInvoiceId } from '../../../config/Utils.js';
 
 const ManageUsers = () => {
     const { purchases, updatePurchases } = usePurchases();
@@ -24,13 +26,24 @@ const ManageUsers = () => {
         loadProducts();
     }, []);
 
-    const getUsers = () => {
+    const usersData = useMemo(() => {
         const userMap = new Map();
+        const userFirstPurchase = new Map();
+
+        if (!Array.isArray(purchases)) {
+            return [];
+        }
 
         purchases.forEach(purchase => {
             if (userMap.has(purchase.email)) {
                 const user = userMap.get(purchase.email);
                 user.itemsPurchased.push(purchase.productName);
+
+                const currentFirstPurchase = userFirstPurchase.get(purchase.email);
+                const purchaseTime = parseISO(purchase.purchasedAt || '').getTime();
+                if (!currentFirstPurchase || purchaseTime < currentFirstPurchase) {
+                    userFirstPurchase.set(purchase.email, purchaseTime);
+                }
             } else {
                 userMap.set(purchase.email, {
                     id: userMap.size + 1,
@@ -38,16 +51,22 @@ const ManageUsers = () => {
                     email: purchase.email,
                     itemsPurchased: [purchase.productName]
                 });
+
+                userFirstPurchase.set(purchase.email, parseISO(purchase.purchasedAt || '').getTime());
             }
         });
 
-        return Array.from(userMap.values());
-    };
+        return Array.from(userMap.values()).sort((a, b) => {
+            const dateA = userFirstPurchase.get(a.email) || 0;
+            const dateB = userFirstPurchase.get(b.email) || 0;
+
+            return dateA - dateB;
+        });
+    }, [purchases]);
 
     useEffect(() => {
-        const usersData = getUsers();
         setUsers(usersData);
-    }, [purchases]);
+    }, [usersData]);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(5);
@@ -73,6 +92,7 @@ const ManageUsers = () => {
             const filteredPurchases = purchases.filter(p => p.email !== editingUser.email);
 
             const newPurchases = editForm.itemsPurchased.map(item => ({
+                id: generateInvoiceId(),
                 name: editForm.name,
                 email: editingUser.email,
                 productName: item,
@@ -120,51 +140,7 @@ const ManageUsers = () => {
                 </div>
             ) : (
                 <div className={ManageUsersStyles.tableContainer}>
-                    <table className={ManageUsersStyles.table}>
-                        <thead className={ManageUsersStyles.tableHead}>
-                            <tr>
-                                <th className={ManageUsersStyles.tableHeader}>
-                                    Name
-                                </th>
-                                <th className={ManageUsersStyles.tableHeader}>
-                                    Email
-                                </th>
-                                <th className={ManageUsersStyles.tableHeader}>
-                                    Items Purchased
-                                </th>
-                                <th className={ManageUsersStyles.tableHeader}>
-                                    Actions
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody className={ManageUsersStyles.tableBody}>
-                            {currentUsers.map((user) => (
-                                <tr key={user.id} className={ManageUsersStyles.tableRow}>
-                                    <td className={ManageUsersStyles.tableCellName}>
-                                        {user.name}
-                                    </td>
-                                    <td className={ManageUsersStyles.tableCellEmail}>
-                                        {user.email}
-                                    </td>
-                                    <td className={ManageUsersStyles.tableCellItems}>
-                                        <div className={ManageUsersStyles.itemsContainer}>
-                                            {user.itemsPurchased.map((item, index) => (
-                                                <div key={index} className={ManageUsersStyles.itemText}>
-                                                    {item}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </td>
-                                    <td className={ManageUsersStyles.tableCellActions}>
-                                        <button className={ManageUsersStyles.editButton}
-                                            onClick={() => handleEditClick(user)}>
-                                            Edit
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                    <UserTable users={currentUsers} onEditClick={handleEditClick} />
                 </div>
             )}
 
