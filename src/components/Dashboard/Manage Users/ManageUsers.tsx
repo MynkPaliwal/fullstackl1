@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { formatISO, parseISO } from 'date-fns';
 import { fetchAppleProducts } from '../../../api/fallbackProducts.tsx';
-import { Users } from './ManageUsers.types.ts';
+import { Users, Product } from './ManageUsers.types.ts';
 import { ManageUsersStyles } from './ManageUsers.styles.ts';
 import EditDetails from '../EditDetails/EditDetails.tsx';
 import UserTable from '../../ui/UserTable.tsx';
@@ -11,7 +11,7 @@ import { generateInvoiceId } from '../../../config/Utils.js';
 const ManageUsers = () => {
     const { purchases, updatePurchases } = usePurchases();
     const [users, setUsers] = useState<Users[]>([]);
-    const [availableProducts, setAvailableProducts] = useState<any[]>([]);
+    const [availableProducts, setAvailableProducts] = useState<Product[]>([]);
 
     useEffect(() => {
         const loadProducts = async () => {

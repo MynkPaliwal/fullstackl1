@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { formatISO, parseISO } from 'date-fns';
 import { fetchAppleProducts } from '../../../api/fallbackProducts.tsx';
-import { TrendingProduct } from './Billings.types.ts';
+import { TrendingProduct, Product } from './Billings.types.ts';
 import { BillingsStyles } from './Billings.styles.ts';
 import InvoiceList from '../../ui/InvoiceList.tsx';
 import { usePurchases } from '../../../context/AppContext.tsx';
@@ -9,7 +9,7 @@ import { getPaginatedItems, getTrendingProducts } from '../../../config/Utils.js
 
 const Billings = () => {
     const { purchases } = usePurchases();
-    const [products, setProducts] = useState<any[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);
     const [trendingProducts, setTrendingProducts] = useState<TrendingProduct[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(5);

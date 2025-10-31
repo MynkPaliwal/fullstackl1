@@ -13,3 +13,10 @@ export interface PurchaseRecord {
     productName: string;
     purchasedAt: string;
 }
+
+export interface Product {
+    id: number;
+    name: string;
+    price: string;
+    image: string;
+}
