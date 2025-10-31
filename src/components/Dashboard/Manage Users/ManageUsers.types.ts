@@ -11,3 +11,10 @@ export interface Users {
     email: string;
     itemsPurchased: string[];
 }
+
+export interface Product {
+    id: number;
+    name: string;
+    price: string;
+    image: string;
+}

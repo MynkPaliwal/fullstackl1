@@ -1,5 +1,6 @@
 import React from 'react';
 import { format, parseISO, isValid } from 'date-fns';
+import { formatPurchaseDate } from '../../config/Utils';
 
 interface Invoice {
     id: string;
@@ -14,18 +15,6 @@ interface InvoiceListProps {
 }
 
 const InvoiceList: React.FC<InvoiceListProps> = ({ invoices }) => {
-    const formatDate = (dateString: string) => {
-        try {
-            const date = parseISO(dateString);
-            if (!isValid(date)) {
-                return dateString;
-            }
-            return format(date, 'MMM d, yyyy');
-        } catch (error) {
-            return dateString;
-        }
-    };
-
     return (
         <>
             {invoices.map((invoice, index) => (
@@ -40,7 +29,7 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ invoices }) => {
                         {invoice.userEmail}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                        {formatDate(invoice.date)}
+                        {formatPurchaseDate(invoice.date)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">

@@ -11,6 +11,7 @@ import { fetchAppleProducts } from "../../api/fallbackProducts.tsx";
 import fallbackSponsors from "../../api/fallbackSponsors.tsx";
 import { HomepageStyles } from "./Homepage.styles.ts";
 import { usePurchases } from "../../context/AppContext.tsx";
+import { Product } from './Homepage.types.ts';
 
 const Homepage = () => {
   const { addPurchase } = usePurchases();
@@ -18,7 +19,7 @@ const Homepage = () => {
   const [isPurchaseFormOpen, setIsPurchaseFormOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<{ name: string; price: string } | null>(null);
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
